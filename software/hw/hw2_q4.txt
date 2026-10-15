@@ -1,0 +1,13 @@
+4. Review the example in “[Code4]_Multi-Layer_Perceptron_for_MNIST-GPU.ipynb”. Based on the network architecture, answer the following (6pts)::
+How many total parameters are required? (count the bias of each layer as a separate parameter)
+How many total operations are required to classify each input image? Use the following assumptions for your count:
+    1 Multiply-Accumulate (MAC) = 2 operations
+    1 ReLU activation = 1 operation
+    1 Bias addition = 1 operation
+
+Every input in a layer has a separate w for each output. Each output in the layer also has a bias.
+Number of parameters in a layer = num input * num output + num output
+28*28*512 + 512 + 512*512 + 512 + 512*10 + 10 = 669,706
+
+Each output has the number of inputs MAC operation and one bias operation and one relu operation.
+(28*28*512*2 + 512*1 + 512*1) + (512*512*2 + 512*1 + 512*1) + (512*10*2 + 10*1 + 10*1) = 1,339,412
