@@ -5,6 +5,12 @@ module mac (out, a, b, c);
 parameter bw = 4;
 parameter psum_bw = 16;
 
-...
+input unsigned [bw-1:0] a;
+input signed [bw-1:0] b;
+input signed [psum_bw-1:0] c;
+
+output signed [psum_bw-1:0] out;
+
+assign out = c + $signed({1'b0,a}) + b;
 
 endmodule
