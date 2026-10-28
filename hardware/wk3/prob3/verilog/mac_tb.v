@@ -9,8 +9,14 @@ parameter psum_bw = 16;
 
 reg clk = 0;
 
-reg  [bw-1:0] a;
-reg  [bw-1:0] b;
+reg  [bw-1:0] a0;
+reg  [bw-1:0] b0;
+reg  [bw-1:0] a1;
+reg  [bw-1:0] b1;
+reg  [bw-1:0] a2;
+reg  [bw-1:0] b2;
+reg  [bw-1:0] a3;
+reg  [bw-1:0] b3;
 reg  [psum_bw-1:0] c;
 wire [psum_bw-1:0] out;
 reg  [psum_bw-1:0] expected_out = 0;
@@ -98,11 +104,20 @@ endfunction
 // Below function is for verification
 function [psum_bw-1:0] mac_predicted;
   
-  input [bw-1:0] a;
-  input [bw-1:0] b;
+  input [bw-1:0] a0;
+  input [bw-1:0] b0;
+  input [bw-1:0] a1;
+  input [bw-1:0] b1;
+  input [bw-1:0] a2;
+  input [bw-1:0] b2;
+  input [bw-1:0] a3;
+  input [bw-1:0] b3;
   input [psum_bw-1:0] c;
   begin
-    mac_predicted = $signed(c) + $signed({1'b0, a}) * $signed(b);
+    mac_predicted = $signed(c) + $signed({1'b0, a0}) * $signed(b0)
+                                + $signed({1'b0, a1}) * $signed(b1)
+                                + $signed({1'b0, a2}) * $signed(b2)
+                                + $signed({1'b0, a3}) * $signed(b3);
   end
 
 endfunction
@@ -111,8 +126,14 @@ endfunction
 
 mac_wrapper #(.bw(bw), .psum_bw(psum_bw)) mac_wrapper_instance (
 	.clk(clk), 
-        .a(a), 
-        .b(b),
+        .a0(a0), 
+        .b0(b0),
+        .a1(a1), 
+        .b1(b1),
+        .a2(a2), 
+        .b2(b2),
+        .a3(a3), 
+        .b3(b3),
         .c(c),
 	.out(out)
 ); 
@@ -133,19 +154,35 @@ initial begin
   $display("-------------------- Computation start --------------------");
   
 
-  for (i=0; i<10; i=i+1) begin  // Data lenght is 10 in the data files
+  for (i=0; i<5; i=i+1) begin  // Data lenght is 10 in the data files
 
      #1 clk = 1'b1;
      #1 clk = 1'b0;
 
+    
      w_scan_file = $fscanf(w_file, "%d\n", w_dec);
      x_scan_file = $fscanf(x_file, "%d\n", x_dec);
+     a0 = x_bin(x_dec); // unsigned number
+     b0 = w_bin(w_dec); // signed number
 
-     a = x_bin(x_dec); // unsigned number
-     b = w_bin(w_dec); // signed number
+     w_scan_file = $fscanf(w_file, "%d\n", w_dec);
+     x_scan_file = $fscanf(x_file, "%d\n", x_dec);
+     a1 = x_bin(x_dec); // unsigned number
+     b1 = w_bin(w_dec); // signed number
+
+     w_scan_file = $fscanf(w_file, "%d\n", w_dec);
+     x_scan_file = $fscanf(x_file, "%d\n", x_dec);
+     a2 = x_bin(x_dec); // unsigned number
+     b2 = w_bin(w_dec); // signed number
+
+     w_scan_file = $fscanf(w_file, "%d\n", w_dec);
+     x_scan_file = $fscanf(x_file, "%d\n", x_dec);
+     a3 = x_bin(x_dec); // unsigned number
+     b3 = w_bin(w_dec); // signed number
+
      c = expected_out;
 
-     expected_out = mac_predicted(a, b, c);
+     expected_out = mac_predicted(a0, b0, a1, b1, a2, b2, a3, b3, c);
 
   end
 
