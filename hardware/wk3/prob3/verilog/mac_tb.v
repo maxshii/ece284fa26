@@ -102,7 +102,7 @@ function [psum_bw-1:0] mac_predicted;
   input [bw-1:0] b;
   input [psum_bw-1:0] c;
   begin
-    mac_predicted = c + $signed({1'b0, a}) * $signed(b);
+    mac_predicted = $signed(c) + $signed({1'b0, a}) * $signed(b);
   end
 
 endfunction

@@ -11,6 +11,6 @@ input signed [psum_bw-1:0] c;
 
 output signed [psum_bw-1:0] out;
 
-assign out = c + $signed({1'b0,a}) + b;
+assign out = c + $signed({1'b0,a}) * b;
 
 endmodule
