@@ -62,16 +62,48 @@ endfunction
 
 
 function [3:0] x_bin ;
+  input integer  x ;
+  begin
 
-...
+    if (x>7) begin
+     x_bin[3] = 1;
+     x = x - 8;
+    end
+    else 
+     x_bin[3] = 0;
 
+    if (x>3) begin
+     x_bin[2] = 1;
+     x = x - 4;
+    end
+    else 
+     x_bin[2] = 0;
+
+    if (x>1) begin
+     x_bin[1] = 1;
+     x = x - 2;
+    end
+    else 
+     x_bin[1] = 0;
+
+    if (x>0) 
+     x_bin[0] = 1;
+    else 
+     x_bin[0] = 0;
+
+  end
 endfunction
 
 
 // Below function is for verification
 function [psum_bw-1:0] mac_predicted;
   
-...
+  input [bw-1:0] a;
+  input [bw-1:0] b;
+  input [psum_bw-1:0] c;
+  begin
+    mac_predicted = c + $signed({1'b0, a}) * $signed(b);
+  end
 
 endfunction
 
