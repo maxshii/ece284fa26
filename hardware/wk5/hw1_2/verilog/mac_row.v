@@ -31,7 +31,7 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset);
         .inst_w(inst_temp[2*i-1:2*(i-1)]),
         .inst_e(inst_temp[2*(i+1)-1:2*i]),
         .in_n(in_n[psum_bw*i-1:psum_bw*(i-1)]),
-        .out_s(out_s[psum_bw*(i+1)-1:psum_bw*i]));
+        .out_s(out_s[psum_bw*(i)-1:psum_bw*(i-1)]));
 
       assign valid[i-1] = inst_temp[2*i+1];
   end
