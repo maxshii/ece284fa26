@@ -14,15 +14,34 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
   input  [psum_bw*col-1:0] in_n;
   output [col-1:0] valid;
 
+  reg [row*2-1:0] inst_w_shift;
+  wire [((row+1)*psum_bw*col)-1:0] temp;
+  wire [col*row-1:0] valid_temp;
+  
+  assign temp[psum_bw*col-1:0] = in_n[psum_bw*col-1:0];
+  assign out_s[psum_bw*col-1:0] = temp[psum_bw*col*(row+1)-1:psum_bw*col*row]; 
+  assign valid[col-1:0] = valid_temp[col*row-1:col*(row-1)]; // valid from the last row
+  
+
+  genvar i;
   for (i=1; i < row+1 ; i=i+1) begin : row_num
-      mac_row #(.bw(bw), .psum_bw(psum_bw)) mac_row_instance (
-      ...
-      ...
+      mac_row #(.bw(bw), .psum_bw(psum_bw), .col(col)) mac_row_instance (
+        .clk(clk),
+        .reset(reset),
+        .in_w(in_w[bw*i-1:bw*(i-1)]),  
+        .in_n(temp[psum_bw*col*i-1:psum_bw*col*(i-1)]),
+        .out_s(temp[psum_bw*col*(i+1)-1:psum_bw*col*i]),
+        .inst_w(inst_w_shift[2*i-1:2*(i-1)]),
+        .valid(valid_temp[col*i-1:col*(i-1)])
       );
   end
 
   always @ (posedge clk) begin
-
+    if (reset) begin
+      inst_w_shift <= 0;
+    end else begin
+      inst_w_shift <= {inst_w_shift[(row-1)*2-1:0], inst_w};
+    end
 
    // inst_w flows to row0 to row7
  
