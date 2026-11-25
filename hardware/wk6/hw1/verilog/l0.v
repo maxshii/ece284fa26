@@ -20,8 +20,8 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   
   genvar i;
 
-  assign o_ready = !full[0] & !full[1] & !full[2] & !full[3] & !full[4] & !full[5] & !full[6] & !full[7];
-  assign o_full  = full[0] | full[1] | full[2] | full[3] | full[4] | full[5] | full[6] | full[7];
+  assign o_ready = ~|full; // 1 if all fifo are not full, 0 if any fifo is full
+  assign o_full  = |full; // 1 if any fifo is full, 0 if all fifo are not full
 
 
   for (i=0; i<row ; i=i+1) begin : row_num
