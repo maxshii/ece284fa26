@@ -40,7 +40,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
 
   always @ (posedge clk) begin
    if (reset) begin
-      rd_en <= 8'b00000000;
+      rd_en <= {row{1'b0}};
    end
    else
    begin
