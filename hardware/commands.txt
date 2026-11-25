@@ -1,0 +1,12 @@
+compile files
+    go to folder containing verilog folder
+    run
+        iverilog -o compiled -c filelist
+
+run tb
+    run 
+        vvp compiled
+
+view waveform
+    run
+        gtkwave {}.vcd
