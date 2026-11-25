@@ -41,12 +41,13 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 
   always @ (posedge clk) begin
    if (reset) begin
-      rd_en <= 0;
+      rd_en <= 1'b0;
    end
-   else
-      
-     rd_en <= rd;
- 
+   else begin
+      rd_en <= rd;
+   end
+  
+
   end
 
 
